@@ -17,7 +17,7 @@ def process_file(file_path):
     with open(result_path, "w") as f:
         json.dump(result, f, indent=2)
 
-    print(f"✅ Processed {file_path}, saved to {result_path}")
+    print(f"Processed {file_path}, saved to {result_path}")
 
 if __name__ == "__main__":
     process_file(sys.argv[1])

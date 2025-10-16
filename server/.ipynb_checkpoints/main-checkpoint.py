@@ -8,6 +8,10 @@ UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs("results", exist_ok=True)
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Digital Toolbox API!"}
+
 @app.post("/upload/")
 async def upload_file(file: UploadFile = File(...)):
     file_id = str(uuid.uuid4())
