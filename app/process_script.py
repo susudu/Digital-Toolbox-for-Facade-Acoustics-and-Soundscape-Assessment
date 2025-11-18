@@ -1,4 +1,5 @@
 import sys, json, pandas as pd, os
+from fastapi.responses import JSONResponse
 from datetime import datetime
 
 def process_file(file_path):
@@ -18,6 +19,12 @@ def process_file(file_path):
         json.dump(result, f, indent=2)
 
     print(f"Processed {file_path}, saved to {result_path}")
+    
+    return JSONResponse({
+        "message": "File uploaded and saved successfully.",
+        "processed_path": file_path,
+        "saved_path": result_path
+    })
 
 if __name__ == "__main__":
     process_file(sys.argv[1])
