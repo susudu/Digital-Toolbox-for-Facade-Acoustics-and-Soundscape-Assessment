@@ -16,6 +16,8 @@ def read_root():
 async def upload_file(file: UploadFile = File(...)):
     file_id = str(uuid.uuid4())
     file_path = os.path.join(UPLOAD_DIR, f"{file_id}_{file.filename}")
+
+    print("Saving file to:", os.path.abspath(file_path))
     
     # Save uploaded file
     with open(file_path, "wb") as f:
