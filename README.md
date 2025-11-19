@@ -4,8 +4,7 @@ This is an on-going work, for now gathering resources for façade acoustics and 
 # Digital Toolbox
 An automated data analysis tool.
 
-- [Upload your file here](https://digital-toolbox-api.onrender.com/docs)
-- [View dashboard](https://digital-toolbox-dashboard.onrender.com)
+
 
 
 
