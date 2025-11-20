@@ -24,7 +24,7 @@ async def upload_file(file: UploadFile = File(...)):
         f.write(await file.read())
 
     # Run the processing script (asynchronously)
-    subprocess.Popen(["python", "app/process_script.py", file_path])
+    subprocess.Popen(["python", "app/process_script.py", file_path,file_id])
 
     return JSONResponse({
         "message": "File uploaded successfully and processing started.",
