@@ -235,3 +235,9 @@ if __name__ == "__main__":
     result_path = f"results/{file_id}.png"
     fig.savefig(result_path)
     plt.close(fig)
+
+    print("Saved plot to:", result_path)
+
+    # Delete uploaded file after processing
+    os.remove(file_path)
+    print("Deleted temporary file:", file_path)
