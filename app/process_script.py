@@ -14,7 +14,7 @@ import seaborn as sns
 FIXED_MAX = 7.0   # freely change to 6, 6.5, 7, etc.
 
 def process_file(file_path):
-    df = pd.read_csv(file_path)
+     df = pd.read_excel(file_path)
     summary = df.describe(include='all').to_dict()
     
     result = {
@@ -180,13 +180,11 @@ if __name__ == "__main__":
     # =====================================================
     # CONFIGURATION
     # =====================================================
-    excel_path = r"C:\Users\Rion Shimuchi\Documents\code\X1\data_X1\data_using\With_Average\East_combinedaverage_all.xlsx"
     TITLE = "East Region – Pleasantness vs Eventfulness"
     
     # =====================================================
     # LOAD DATA
     # =====================================================
-    df = pd.read_excel(excel_path)
     df_areas = df.set_index("scene").T
     locations = {area: tuple(df_areas.loc[area]) for area in df_areas.index}
     
