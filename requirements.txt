@@ -1,5 +1,12 @@
 fastapi
 uvicorn
+python-multipart
+pydantic
+matplotlib
 pandas
 streamlit
-python-multipart
+aiofiles
+numy
+density_plot
+soundscapy.surveys
+seaborn
