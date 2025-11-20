@@ -82,6 +82,34 @@ def signed_normalize_fixed(arr, fixed_max):
 # PLOTTING FUNCTION (for normalized plot only) (AXIS FIXED TO ±1, ENHANCED STYLE)
 # ===============================================================================
 def plot_PE(ax, P_values, E_values):
+     
+     if not isinstance(P_values, (list, tuple, np.ndarray)):
+          P_values = [P_values]
+     if not isinstance(E_values, (list, tuple, np.ndarray)):
+          E_values = [E_values]
+
+     # If they are numpy arrays of shape (n,), wrap into list of element pairs
+     if isinstance(P_values, np.ndarray) and P_values.ndim == 1:
+          P_values = list(P_values)
+     if isinstance(E_values, np.ndarray) and E_values.ndim == 1:
+          E_values = list(E_values)
+
+     # ---------------------------------------------------------
+     # 2. Match number of scenes (locations)
+     # ---------------------------------------------------------
+     scene_list = list(locations.keys())
+     n_scenes = len(scene_list)
+
+     if len(P_values) != n_scenes or len(E_values) != n_scenes:
+         print("⚠ WARNING: Mismatched lengths")
+         print("  locations:", n_scenes)
+         print("  P_values:", len(P_values))
+         print("  E_values:", len(E_values))
+
+         # safest fallback: truncate or pad
+         P_values = (list(P_values) + [0]*n_scenes)[:n_scenes]
+         E_values = (list(E_values) + [0]*n_scenes)[:n_scenes]
+     
      used_labels = set()
      for i, location in enumerate(locations.keys()):
           style = SCENE_STYLES.get(location, {'color': 'gray', 'marker': 'o'})
