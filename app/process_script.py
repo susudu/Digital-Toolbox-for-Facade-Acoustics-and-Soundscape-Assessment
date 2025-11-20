@@ -261,8 +261,8 @@ if __name__ == "__main__":
      }
     
      fig = show_normalized_scene_plot(TITLE,P_norm=P_norm,E_norm=E_norm)
-     result_path = f"results/{file_id}.png"
-     fig.savefig(result_path)
+     #result_path = f"results/{file_id}.png"
+     #fig.savefig(result_path)
      plt.close(fig)
 
      print("Saved plot to:", result_path)
