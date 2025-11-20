@@ -12,8 +12,10 @@ import seaborn as sns
 # GLOBAL NORMALIZATION MAXIMUM
 # =====================================================
 FIXED_MAX = 7.0   # freely change to 6, 6.5, 7, etc.
+df = None
 
 def process_file(file_path):
+     global df
      df = pd.read_excel(file_path)
      summary = df.describe(include='all').to_dict()
     
