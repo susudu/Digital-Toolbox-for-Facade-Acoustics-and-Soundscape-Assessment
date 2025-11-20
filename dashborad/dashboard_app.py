@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-BACKEND = "https://your-backend-url.onrender.com"
+BACKEND = "https://digital-toolbox-api.onrender.com/"
 
 st.title("Digital Toolbox Dashboard")
 
@@ -15,3 +15,4 @@ if st.button("Load Result"):
         st.image(plot_url, caption="Processing Result")
     else:
         st.warning("Result not ready yet or file_id not found.")
+
