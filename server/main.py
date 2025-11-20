@@ -31,3 +31,10 @@ async def upload_file(file: UploadFile = File(...)):
         "file_id": file_id,
         "filename": file.filename
     })
+
+@app.get("/result/{file_id}")
+def get_result(file_id: str):
+    plot_path = f"results/{file_id}.png"
+    if not os.path.exists(plot_path):
+        return {"status": "processing or not found"}
+    return FileResponse(plot_path, media_type="image/png")
