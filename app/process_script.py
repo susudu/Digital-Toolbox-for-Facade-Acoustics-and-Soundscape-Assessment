@@ -14,7 +14,7 @@ import seaborn as sns
 FIXED_MAX = 7.0   # freely change to 6, 6.5, 7, etc.
 df = None
 
-def process_file(file_path):
+def process_file(file_path,file_id):
      global df
      df = pd.read_excel(file_path)
      summary = df.describe(include='all').to_dict()
@@ -261,8 +261,8 @@ if __name__ == "__main__":
      }
     
      fig = show_normalized_scene_plot(TITLE,P_norm=P_norm,E_norm=E_norm)
-     #result_path = f"results/{file_id}.png"
-     #fig.savefig(result_path)
+     result_path = f"results/{file_id}.png"
+     fig.savefig(result_path)
      plt.close(fig)
 
      print("Saved plot to:", result_path)
