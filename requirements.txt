@@ -6,7 +6,7 @@ matplotlib
 pandas
 streamlit
 aiofiles
-numy
+numpy
 density_plot
 soundscapy.surveys
 seaborn
