@@ -156,15 +156,23 @@ def show_normalized_scene_plot(TITLE, P_norm, E_norm, locations, SCENE_STYLES, S
     # Plot the points
     plot_PE(ax, P_norm, E_norm, locations, SCENE_STYLES, SCENE_LABELS, TITLE)
 
-    # Legend inside the figure (prevents cropping)
+    # ----- LEGEND OUTSIDE -----
     handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles, labels, title="Scenes", loc="upper right", fontsize=8, frameon=True)
 
-    # Tight layout without cutting legend
-    fig.tight_layout(pad=2.0)
+    fig.legend(
+        handles, labels,
+        title="Scenes",
+        loc="upper left",
+        bbox_to_anchor=(1.02, 1),   # moves legend outside
+        borderaxespad=0,
+        fontsize=8,
+    )
+
+    # Add space on the right so the legend fits
+    fig.subplots_adjust(right=0.78)
 
     return fig
-
+     
 if __name__ == "__main__":
      
      process_file(sys.argv[1],sys.argv[2])
