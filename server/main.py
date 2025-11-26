@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 import subprocess, os, uuid
 
 app = FastAPI(title="Digital Toolbox API")
