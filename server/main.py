@@ -24,7 +24,8 @@ async def upload_file(file: UploadFile = File(...)):
         f.write(await file.read())
 
     # Run the processing script (asynchronously)
-    subprocess.Popen(["python", "app/process_script.py", file_path,file_id])
+    # subprocess.Popen(["python", "app/process_script.py", file_path,file_id])
+    subprocess.run(["python", "app/process_script.py", file_path, file_id])
 
     return JSONResponse({
         "message": "File uploaded successfully and processing started.",
@@ -34,7 +35,11 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.get("/result/{file_id}")
 def get_result(file_id: str):
-    plot_path = f"results/{file_id}.png"
+    #plot_path = f"results/{file_id}.png"
+    plot_path = os.path.join("results", f"{file_id}.png")
+
     if not os.path.exists(plot_path):
-        return {"status": "processing or not found"}
+        return JSONResponse({"status": "processing or not found"})
+
     return FileResponse(plot_path, media_type="image/png")
+    
