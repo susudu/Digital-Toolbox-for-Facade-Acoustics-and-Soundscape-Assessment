@@ -12,6 +12,6 @@ if st.button("Load Result"):
     response = requests.get(plot_url)
 
     if response.status_code == 200:
-        st.image(plot_url, caption="Processing Result")
+        st.image(plot_url, caption="Processing Result plot_url")
     else:
         st.warning("Result not ready yet or file_id not found.")
