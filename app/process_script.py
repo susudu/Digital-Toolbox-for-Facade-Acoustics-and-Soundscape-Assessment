@@ -209,6 +209,9 @@ def show_normalized_scene_plot(TITLE, P_norm, E_norm):
      #plt.show()
 
 if __name__ == "__main__":
+
+     global locations
+     
      process_file(sys.argv[1],sys.argv[2])
      file_path = sys.argv[1]
      file_id = sys.argv[2]
