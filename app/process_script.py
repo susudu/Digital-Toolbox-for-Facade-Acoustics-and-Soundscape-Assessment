@@ -78,135 +78,92 @@ def signed_normalize_fixed(arr, fixed_max):
      # Limit values within [-1, 1] just in case
      norm_arr = np.clip(norm_arr, -1, 1)
      return norm_arr
-
-
+     
 # ===============================================================================
 # PLOTTING FUNCTION (for normalized plot only) (AXIS FIXED TO ±1, ENHANCED STYLE)
 # ===============================================================================
-def plot_PE(ax, P_values, E_values):
-     
-     if not isinstance(P_values, (list, tuple, np.ndarray)):
-          P_values = [P_values]
-     if not isinstance(E_values, (list, tuple, np.ndarray)):
-          E_values = [E_values]
+def plot_PE(ax, P_values, E_values, locations, SCENE_STYLES, SCENE_LABELS, TITLE):
+    # Ensure P_values/E_values are lists
+    P_values = list(P_values) if isinstance(P_values, (np.ndarray, list, tuple)) else [P_values]
+    E_values = list(E_values) if isinstance(E_values, (np.ndarray, list, tuple)) else [E_values]
 
-     # If they are numpy arrays of shape (n,), wrap into list of element pairs
-     if isinstance(P_values, np.ndarray) and P_values.ndim == 1:
-          P_values = list(P_values)
-     if isinstance(E_values, np.ndarray) and E_values.ndim == 1:
-          E_values = list(E_values)
+    # Match number of scenes
+    scene_list = list(locations.keys())
+    n_scenes = len(scene_list)
+    if len(P_values) != n_scenes or len(E_values) != n_scenes:
+        # Pad/truncate safely
+        P_values = (P_values + [0]*n_scenes)[:n_scenes]
+        E_values = (E_values + [0]*n_scenes)[:n_scenes]
 
-     # ---------------------------------------------------------
-     # 2. Match number of scenes (locations)
-     # ---------------------------------------------------------
-     scene_list = list(locations.keys())
-     n_scenes = len(scene_list)
+    used_labels = set()
+    for i, location in enumerate(scene_list):
+        style = SCENE_STYLES.get(location, {'color': 'gray', 'marker': 'o'})
+        label = SCENE_LABELS.get(location, location) if location not in used_labels else None
+        used_labels.add(location)
+        ax.scatter(P_values[i], E_values[i],
+                   marker=style['marker'],
+                   color=style['color'],
+                   label=label,
+                   s=45, alpha=0.8,
+                   edgecolor='black', linewidth=0.6, zorder=3)
 
-     if len(P_values) != n_scenes or len(E_values) != n_scenes:
-         print("⚠ WARNING: Mismatched lengths")
-         print("  locations:", n_scenes)
-         print("  P_values:", len(P_values))
-         print("  E_values:", len(E_values))
+    # Connect points if needed
+    if TITLE == "VR Region View ~ Away – Pleasantness vs Eventfulness":
+        coordinates_dict = {scene: (P_values[i], E_values[i]) for i, scene in enumerate(scene_list)}
+        pairs_to_connect = [
+            ('VR-E1-0v', 'VR-E1-0a'), ('VR-E1-1v', 'VR-E1-1a'),
+            ('VR-E2-0v', 'VR-E2-0a'), ('VR-E2-1v', 'VR-E2-1a'),
+            ('VR-W1-0v', 'VR-W1-0a'), ('VR-W1-1v', 'VR-W1-1a'),
+            ('VR-W2-0v', 'VR-W2-0a'), ('VR-W2-1v', 'VR-W2-1a'),
+        ]
+        for loc1, loc2 in pairs_to_connect:
+            if loc1 in coordinates_dict and loc2 in coordinates_dict:
+                P1, E1 = coordinates_dict[loc1]
+                P2, E2 = coordinates_dict[loc2]
+                ax.plot([P1, P2], [E1, E2], color='gray', linestyle='-', linewidth=0.8, alpha=0.5, zorder=2)
+    else:
+        for i in range(0, len(P_values)-1, 2):
+            ax.plot([P_values[i], P_values[i+1]], [E_values[i], E_values[i+1]],
+                    linestyle='-', color='gray', linewidth=0.8, alpha=0.5, zorder=2)
 
-         # safest fallback: truncate or pad
-         P_values = (list(P_values) + [0]*n_scenes)[:n_scenes]
-         E_values = (list(E_values) + [0]*n_scenes)[:n_scenes]
-     
-     used_labels = set()
-     for i, location in enumerate(locations.keys()):
-          style = SCENE_STYLES.get(location, {'color': 'gray', 'marker': 'o'})
-          label = SCENE_LABELS.get(location, location) if location not in used_labels else None
-          used_labels.add(location)
-          ax.scatter(
-               P_values[i], E_values[i],
-               marker=style['marker'],
-               color=style['color'],
-               label=label,
-               s=45,
-               alpha=0.8,
-               edgecolor='black',
-               linewidth=0.6,
-               zorder=3
-          )
-        
-     if TITLE == "VR Region View ~ Away – Pleasantness vs Eventfulness":
-             # Build coordinates dictionary for easier access
-             coordinates_dict = {
-                 scene: (P_values[i], E_values[i])
-                 for i, scene in enumerate(locations.keys())
-             }
-     
-             # Define which points should be connected
-             pairs_to_connect = [
-                 ('VR-E1-0v', 'VR-E1-0a'),
-                 ('VR-E1-1v', 'VR-E1-1a'),
-                 ('VR-E2-0v', 'VR-E2-0a'),
-                 ('VR-E2-1v', 'VR-E2-1a'),
-                 ('VR-W1-0v', 'VR-W1-0a'),
-                 ('VR-W1-1v', 'VR-W1-1a'),
-                 ('VR-W2-0v', 'VR-W2-0a'),
-                 ('VR-W2-1v', 'VR-W2-1a'),
-             ]
-     
-             # Draw clean pair-to-pair lines
-             for loc1, loc2 in pairs_to_connect:
-                 if loc1 in coordinates_dict and loc2 in coordinates_dict:
-                      P1, E1 = coordinates_dict[loc1]
-                      P2, E2 = coordinates_dict[loc2]
-                      ax.plot(
-                           [P1, P2], [E1, E2],
-                           color='gray',linestyle='-',linewidth=0.8,alpha=0.5,zorder=2)
-     else :
-          # Connect paired points
-          for i in range(0, len(P_values) - 1, 2):
-               ax.plot([P_values[i], P_values[i + 1]], [E_values[i], E_values[i + 1]],
-                       linestyle='-', color='gray', linewidth=0.8, alpha=0.5, zorder=2)
+    # Axes & grid
+    ax.set_xlim(-1.05, 1.05)
+    ax.set_ylim(-1.05, 1.05)
+    ax.set_xticks(np.arange(-1, 1.05, 0.25))
+    ax.set_yticks(np.arange(-1, 1.05, 0.25))
+    ax.tick_params(axis='both', labelsize=8)
+    ax.grid(True, linestyle='--', linewidth=0.5, alpha=1)
+    ax.set_aspect('equal', 'box')
+    ax.axhline(0, color='black', linewidth=1.5, alpha=0.4, zorder=2)
+    ax.axvline(0, color='black', linewidth=1.5, alpha=0.4, zorder=2)
 
-     # Fixed axis and quadrant labels
-     ax.set_xlim(-1.05, 1.05)
-     ax.set_ylim(-1.05, 1.05)
-     ax.set_xticks(np.arange(-1, 1.05, 0.25))
-     ax.set_yticks(np.arange(-1, 1.05, 0.25))
-     ax.tick_params(axis='both', labelsize=8)
-     ax.grid(True, linestyle='--', linewidth=0.5, alpha=1)
-     ax.set_aspect('equal', 'box')
-     ax.axhline(0, color='black', linewidth=1.5, alpha=0.4, zorder=2)
-     ax.axvline(0, color='black', linewidth=1.5, alpha=0.4, zorder=2)
+    # Quadrant labels
+    ax.text(-0.56, 0.56, 'Chaotic', color='gray', fontsize=9, ha='center', va='center', fontweight='bold')
+    ax.text(0.56, 0.56, 'Vibrant', color='gray', fontsize=9, ha='center', va='center', fontweight='bold')
+    ax.text(-0.56, -0.56, 'Monotonous', color='gray', fontsize=9, ha='center', va='center', fontweight='bold')
+    ax.text(0.56, -0.56, 'Calm', color='gray', fontsize=9, ha='center', va='center', fontweight='bold')
 
-     # Quadrant labels
-     ax.text(-0.56, 0.56, 'Chaotic', color='gray', fontsize=9,
-             ha='center', va='center', alpha=0.8, fontweight='bold')
-     ax.text(0.56, 0.56, 'Vibrant', color='gray', fontsize=9,
-             ha='center', va='center', alpha=0.8, fontweight='bold')
-     ax.text(-0.56, -0.56, 'Monotonous', color='gray', fontsize=9,
-             ha='center', va='center', alpha=0.8, fontweight='bold')
-     ax.text(0.56, -0.56, 'Calm', color='gray', fontsize=9,
-             ha='center', va='center', alpha=0.8, fontweight='bold')
+    ax.set_title("Fixed-Max Normalized (−1 to 1)", fontsize=10, fontweight='bold')
+    ax.set_xlabel("Pleasantness (P)", fontsize=9)
+    ax.set_ylabel("Eventfulness (E)", fontsize=9)
 
-     ax.set_title("Fixed-Max Normalized (−1 to 1)", fontsize=10, fontweight='bold')
-     ax.set_xlabel("Pleasantness (P)", fontsize=9)
-     ax.set_ylabel("Eventfulness (E)", fontsize=9)
 
-def show_normalized_scene_plot(TITLE, P_norm, E_norm):
-     fig, ax = plt.subplots(figsize=(4, 5))
-     plt.suptitle(f"{TITLE}", fontsize=12, fontweight='bold', y=0.9)
+def show_normalized_scene_plot(TITLE, P_norm, E_norm, locations, SCENE_STYLES, SCENE_LABELS):
+    # Bigger figure for Streamlit
+    fig, ax = plt.subplots(figsize=(6,6))
+    plt.suptitle(TITLE, fontsize=12, fontweight='bold', y=0.95)
 
-     # Your existing custom plotting function
-     plot_PE(ax, P_norm, E_norm)
+    # Plot the points
+    plot_PE(ax, P_norm, E_norm, locations, SCENE_STYLES, SCENE_LABELS, TITLE)
 
-     # Shared legend
-     handles, labels = ax.get_legend_handles_labels()
-     fig.legend(
-          handles, labels,
-          title="Scenes",
-          loc='upper left',
-          bbox_to_anchor=(1.02, 0.82),
-          prop={'size': 9}
-     )
+    # Legend inside the figure (prevents cropping)
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles, labels, title="Scenes", loc="upper right", fontsize=8, frameon=True)
 
-     plt.tight_layout(rect=[0, 0, 0, 0])
-     return fig
-     #plt.show()
+    # Tight layout without cutting legend
+    fig.tight_layout(pad=2.0)
+
+    return fig
 
 if __name__ == "__main__":
      
@@ -268,11 +225,11 @@ if __name__ == "__main__":
     
      fig = show_normalized_scene_plot(TITLE,P_norm=P_norm,E_norm=E_norm)
      result_path = f"results/{file_id}.png"
-     fig.savefig(result_path)
+     fig.savefig(result_path, dpi=300, bbox_inches="tight", pad_inches=0.5)
      plt.close(fig)
 
      print("Saved plot to:", result_path)
 
      # Delete uploaded file after processing
      #os.remove(file_path)
-     print("Deleted temporary file:", file_path)
+     #print("Deleted temporary file:", file_path)
