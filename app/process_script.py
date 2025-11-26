@@ -223,7 +223,7 @@ if __name__ == "__main__":
          'VR-E2-1a': 'VR – façade move | noise-away',
      }
     
-     fig = show_normalized_scene_plot(TITLE,P_norm=P_norm,E_norm=E_norm)
+     fig = show_normalized_scene_plot(TITLE,P_norm=P_norm,E_norm=E_norm,locations, SCENE_STYLES, SCENE_LABELS)
      result_path = f"results/{file_id}.png"
      fig.savefig(result_path, dpi=300, bbox_inches="tight", pad_inches=0.5)
      plt.close(fig)
