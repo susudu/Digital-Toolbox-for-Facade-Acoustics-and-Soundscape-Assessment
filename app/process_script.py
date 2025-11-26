@@ -203,6 +203,7 @@ def show_normalized_scene_plot(TITLE, P_norm, E_norm):
      )
 
      plt.tight_layout(rect=[0, 0, 0, 0])
+     return fig
      #plt.show()
 
 if __name__ == "__main__":
