@@ -207,6 +207,7 @@ def show_normalized_scene_plot(TITLE, P_norm, E_norm):
 
 if __name__ == "__main__":
      process_file(sys.argv[1],sys.argv[2])
+     file_id = sys.argv[2]
 
      # =====================================================
      # CONFIGURATION
