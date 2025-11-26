@@ -274,5 +274,5 @@ if __name__ == "__main__":
      print("Saved plot to:", result_path)
 
      # Delete uploaded file after processing
-     os.remove(file_path)
+     #os.remove(file_path)
      print("Deleted temporary file:", file_path)
