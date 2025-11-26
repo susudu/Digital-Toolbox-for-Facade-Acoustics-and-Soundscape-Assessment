@@ -8,6 +8,8 @@ from soundscapy.plotting import density_plot
 import soundscapy.surveys as surveys
 import seaborn as sns
 
+locations = {}
+
 # =====================================================
 # GLOBAL NORMALIZATION MAXIMUM
 # =====================================================
@@ -56,7 +58,7 @@ def compute_P_E(locations):
           P, E = calculate_coordinates(e, v, p, ca, u, m, a, ch)
           P_values.append(P)
           E_values.append(E)
-          return np.array(P_values), np.array(E_values)
+     return np.array(P_values), np.array(E_values)
 
 # =====================================================
 # FIXED-MAX SIGNED NORMALIZATION ( −1 to 1 )
